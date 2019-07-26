@@ -7,6 +7,7 @@ from ..service.user_service import save_new_user, get_all_users, get_a_user
 api = UserDto.api
 _user = UserDto.user
 
+"""Contains the endpoints of the REST API"""
 
 @api.route('/')
 class UserList(Resource):
