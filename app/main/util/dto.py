@@ -1,5 +1,7 @@
 from flask_restplus import Namespace, fields
 
+"""Names spaces for the DTO, similar to Blueprint"""
+
 
 class UserDto:
     api = Namespace('user', description='user related operations')
