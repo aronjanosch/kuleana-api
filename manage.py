@@ -7,9 +7,7 @@ from flask_script import Manager
 from app.main import create_app, db
 from app import blueprint
 
-from app.main.model import blacklist
 from app.main.model import user
-
 
 app = create_app(os.getenv('BOILERPLATE_ENV') or 'dev')
 app.register_blueprint(blueprint)
@@ -39,6 +37,12 @@ def test():
         return 0
     return 1
 
+
+def do_nothing(*args):
+    pass
+
+
+do_nothing(user)
 
 if __name__ == '__main__':
     manager.run()

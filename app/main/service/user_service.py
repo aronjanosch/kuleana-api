@@ -20,7 +20,7 @@ def save_new_user(data):
         save_changes(new_user)
         response_object = {
             'status': 'success',
-            'message': 'Successfully registered.'
+            'message': 'Successfully registered.',
         }
         return response_object, 201
     else:
@@ -31,6 +31,23 @@ def save_new_user(data):
         return response_object, 409
 
 
+def delete_user(data):
+    user = User.query.filter_by(email=data['email']).first()
+    if user:
+        delete_entry(user)
+        response_object = {
+            'status': 'success',
+            'message': 'User successfully deleted.',
+        }
+        return response_object
+    else:
+        response_object = {
+            'status': 'fail',
+            'message': 'User not found.',
+        }
+        return response_object
+
+
 def get_all_users():
     return User.query.all()
 
@@ -39,6 +56,11 @@ def get_a_user(public_id):
     return User.query.filter_by(public_id=public_id).first()
 
 
-def save_changes(data):
-    db.session.add(data)
+def delete_entry(user):
+    db.session.delete(user)
+    db.session.commit()
+
+
+def save_changes(user):
+    db.session.add(user)
     db.session.commit()
