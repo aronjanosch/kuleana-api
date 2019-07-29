@@ -1,10 +1,13 @@
 from flask import request
 from flask_restplus import Resource
+from flask_jwt_extended import jwt_required, jwt_refresh_token_required
 
 from ..util.dto import AuthDto
+from app.main.service.auth_service import Auth
 
 api = AuthDto.api
 user_auth = AuthDto.user_auth
+
 
 @api.route('/login')
 class UserLogin(Resource):
@@ -16,7 +19,30 @@ class UserLogin(Resource):
     def post(self):
         # get the post data
         post_data = request.json
-        return Auth.login_user(data=post_data)
+        return Auth.login(data=post_data)
+
+
+@api.route('/refresh')
+class UserRefresh(Resource):
+    """
+    User Refresh Resource
+    """
+    @api.doc('user refresh')
+    @jwt_refresh_token_required
+    def post(self):
+        return Auth.refresh()
+
+
+@api.route('/token')
+class UserTokens(Resource):
+    """
+    Get User Tokens
+    """
+    @api.doc('get user tokens')
+    @jwt_required
+    def get(self):
+        return Auth.get_tokens()
+
 
 @api.route('/logout')
 class LogoutAPI(Resource):
@@ -27,4 +53,4 @@ class LogoutAPI(Resource):
     def post(self):
         # get auth token
         auth_header = request.headers.get('Authorization')
-        return Auth.logout_user(data=auth_header)
+        return Auth.logout(data=auth_header)
